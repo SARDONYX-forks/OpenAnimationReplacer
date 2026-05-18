@@ -29,7 +29,8 @@ namespace UI
 
 		SetWindowDimensions(0.f, 0.f, 850.f, -1, WindowAlignment::kCenterLeft);
 
-		const auto title = std::format("Open Animation Replacer {}.{}.{}", Plugin::VERSION.major(), Plugin::VERSION.minor(), Plugin::VERSION.patch());
+		auto version = SKSE::GetPluginVersion();
+		const auto title = std::format("Open Animation Replacer {}.{}.{}", version.major(), version.minor(), version.patch());
 		if (ImGui::Begin(title.data(), &UIManager::GetSingleton().bShowMain, ImGuiWindowFlags_NoCollapse)) {
 			if (ImGui::BeginTable("EvaluateForReference", 2, ImGuiTableFlags_None)) {
 				ImGui::TableNextRow();

@@ -2,7 +2,7 @@
 #include "OpenAnimationReplacer.h"
 
 #include <windows.h>
-#include <xbyak.h>
+#include <xbyak/xbyak.h>
 
 namespace Hooks
 {

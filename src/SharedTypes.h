@@ -159,7 +159,7 @@ namespace Components
 
 		void Parse(rapidjson::Value& a_value)
 		{
-			const auto formObject = a_value.GetObj();
+			const auto formObject = a_value.GetObject();
 			if (const auto pluginNameIt = formObject.FindMember("pluginName"); pluginNameIt != formObject.MemberEnd() && pluginNameIt->value.IsString()) {
 				if (const auto formIDIt = formObject.FindMember("formID"); formIDIt != formObject.MemberEnd() && formIDIt->value.IsString()) {
 					_pluginNameString = Utils::TrimWhitespace(pluginNameIt->value.GetString());
@@ -625,7 +625,7 @@ namespace Components
 
 		void Parse(rapidjson::Value& a_value)
 		{
-			const auto object = a_value.GetObj();
+			const auto object = a_value.GetObject();
 
 			if (const auto keywordIt = object.FindMember("editorID"); keywordIt != object.MemberEnd() && keywordIt->value.IsString()) {
 				const std::string_view editorID = keywordIt->value.GetString();

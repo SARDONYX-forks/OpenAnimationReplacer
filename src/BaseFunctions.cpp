@@ -10,7 +10,7 @@ namespace Functions
 	void FunctionBase::Initialize(void* a_value)
 	{
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
-		const auto object = value.GetObj();
+		const auto object = value.GetObject();
 
 		// disabled
 		if (const auto disabledIt = object.FindMember("disabled"); disabledIt != object.MemberEnd() && disabledIt->value.IsBool()) {
@@ -321,7 +321,7 @@ namespace Functions
 	void MultiFunctionComponent::InitializeComponent(void* a_value)
 	{
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
-		const auto object = value.GetObj();
+		const auto object = value.GetObject();
 		if (const auto functionsIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); functionsIt != object.MemberEnd() && functionsIt->value.IsArray()) {
 			for (const auto functionsArray = functionsIt->value.GetArray(); auto& functionValue : functionsArray) {
 				if (auto function = CreateFunctionFromJson(functionValue)) {
@@ -360,7 +360,7 @@ namespace Functions
 	{
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = value.GetObj();
+		const auto object = value.GetObject();
 		if (const auto formIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); formIt != object.MemberEnd() && formIt->value.IsObject()) {
 			form.Parse(formIt->value);
 		}
@@ -378,7 +378,7 @@ namespace Functions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObject();
 		if (const auto valueIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); valueIt != object.MemberEnd() && valueIt->value.IsObject()) {
 			value.Parse(valueIt->value);
 		}
@@ -396,7 +396,7 @@ namespace Functions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObject();
 		if (const auto valueIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); valueIt != object.MemberEnd() && valueIt->value.IsArray()) {
 			value.Parse(valueIt->value);
 		}
@@ -414,7 +414,7 @@ namespace Functions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObject();
 		if (const auto keywordIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); keywordIt != object.MemberEnd() && keywordIt->value.IsObject()) {
 			keyword.Parse(keywordIt->value);
 		}
@@ -432,7 +432,7 @@ namespace Functions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObject();
 		if (const auto textIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); textIt != object.MemberEnd() && textIt->value.IsString()) {
 			text.Parse(textIt->value);
 		}
@@ -450,7 +450,7 @@ namespace Functions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObject();
 		if (const auto boolIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); boolIt != object.MemberEnd() && boolIt->value.IsBool()) {
 			bValue = boolIt->value.GetBool();
 		}
@@ -483,9 +483,9 @@ namespace Functions
 	void ConditionFunctionComponent::InitializeComponent(void* a_value)
 	{
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
-		const auto object = value.GetObj();
+		const auto object = value.GetObject();
 		if (const auto componentIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); componentIt != object.MemberEnd() && componentIt->value.IsObject()) {
-			const auto componentObject = componentIt->value.GetObj();
+			const auto componentObject = componentIt->value.GetObject();
 			if (const auto conditionsIt = componentObject.FindMember("conditions"); conditionsIt != componentObject.MemberEnd() && conditionsIt->value.IsArray()) {
 				for (const auto conditionsArray = conditionsIt->value.GetArray(); auto& conditionValue : conditionsArray) {
 					if (auto condition = Conditions::CreateConditionFromJson(conditionValue)) {
