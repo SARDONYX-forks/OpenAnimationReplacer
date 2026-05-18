@@ -342,7 +342,7 @@ namespace Components
 
 	void NumericValue::Parse(rapidjson::Value& a_value)
 	{
-		const auto valueObject = a_value.GetObj();
+		const auto valueObject = a_value.GetObject();
 
 		if (const auto valueIt = valueObject.FindMember("value"); valueIt != valueObject.MemberEnd() && valueIt->value.IsNumber()) {
 			SetStaticValue(valueIt->value.GetFloat());

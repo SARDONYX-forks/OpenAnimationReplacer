@@ -24,7 +24,7 @@ namespace Conditions
 		return hash;
 	}
 
-	constexpr uint32_t operator"" _h(const char* a_str, size_t a_size) noexcept
+	constexpr uint32_t operator""_h(const char* a_str, size_t a_size) noexcept
 	{
 		return Hash(a_str, a_size);
 	}
@@ -92,7 +92,7 @@ namespace Conditions
 			return std::make_unique<InvalidCondition>("Missing condition value");
 		}
 
-		const auto object = a_value.GetObj();
+		const auto object = a_value.GetObject();
 
 		if (const auto conditionNameIt = object.FindMember("condition"); conditionNameIt != object.MemberEnd() && conditionNameIt->value.IsString()) {
 			bool bHasRequiredPlugin = false;
@@ -131,7 +131,7 @@ namespace Conditions
 				}
 			} else {
 				// no required plugin, compare required version with OAR conditions version
-				if (requiredVersion > Plugin::VERSION) {
+				if (requiredVersion > SKSE::GetPluginVersion()) {
 					auto errorStr = std::format("Condition {} requires a newer version of OAR! ({})", conditionName, requiredVersion.string("."));
 					if (bEssential) {
 						DetectedProblems::GetSingleton().MarkOutdatedVersion();
@@ -234,7 +234,7 @@ namespace Conditions
 	std::unique_ptr<ICondition> ConvertDeprecatedCondition(std::unique_ptr<ICondition>& a_deprecatedCondition, std::string_view a_conditionName, rapidjson::Value& a_value)
 	{
 		rapidjson::Document doc(rapidjson::kObjectType);
-		const auto object = a_value.GetObj();
+		const auto object = a_value.GetObject();
 
 		if (a_conditionName == "CurrentTarget"sv || a_conditionName == "CurrentTargetFactionRank"sv || a_conditionName == "CurrentTargetHasKeyword"sv) {
 			if (auto newCondition = OpenAnimationReplacer::GetSingleton().CreateCondition("TARGET"sv)) {
@@ -1123,11 +1123,11 @@ namespace Conditions
 		ConditionBase::Initialize(a_value);
 
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
-		const auto object = value.GetObj();
+		const auto object = value.GetObject();
 
 		// backwards compatibility with saved pre 2.3.0 random conditions
 		if (const auto randomIt = object.FindMember(rapidjson::StringRef("Random value")); randomIt != object.MemberEnd() && randomIt->value.IsObject()) {
-			const auto randomObj = randomIt->value.GetObj();
+			const auto randomObj = randomIt->value.GetObject();
 
 			if (const auto minIt = randomObj.FindMember("min"); minIt != randomObj.MemberEnd() && minIt->value.IsNumber()) {
 				minRandomComponent->SetStaticValue(minIt->value.GetFloat());
@@ -4299,7 +4299,7 @@ namespace Conditions
 				RE::MATERIAL_ID::kBoulderSmall,
 				RE::MATERIAL_ID::kSnowStairs,
 				RE::MATERIAL_ID::kStoneHeavy,
-				RE::MATERIAL_ID::kDragonSkeleton,
+				RE::MATERIAL_ID::kDragon,
 				RE::MATERIAL_ID::kTrap,
 				RE::MATERIAL_ID::kBowsStaves,
 				RE::MATERIAL_ID::kAlduin,
@@ -4566,10 +4566,10 @@ namespace Conditions
 							RE::hkpWorldRayCastInput raycastInput;
 							RE::hkpWorldRayCastOutput raycastOutput;
 
-							uint32_t collisionFilterInfo = 0;
+							RE::CFilter collisionFilterInfo{ .filter = 0 };
 							actor->GetCollisionFilterInfo(collisionFilterInfo);
-							uint16_t collisionGroup = collisionFilterInfo >> 16;
-							raycastInput.filterInfo = (static_cast<uint32_t>(collisionGroup) << 16) | static_cast<uint32_t>(RE::COL_LAYER::kCharController);
+							uint16_t collisionGroup = collisionFilterInfo.GetSystemGroup();
+							raycastInput.filterInfo.SetCollisionLayer(RE::COL_LAYER::kCharController);
 							raycastInput.from = raycastStart;
 							raycastInput.to = raycastEnd;
 

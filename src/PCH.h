@@ -206,5 +206,3 @@ using WriteLocker = std::unique_lock<SharedLock>;
 #endif
 
 #define DLLEXPORT __declspec(dllexport)
-
-#include "Plugin.h"

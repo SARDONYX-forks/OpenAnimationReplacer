@@ -1,6 +1,7 @@
 #include "Functions.h"
 
 #include "OpenAnimationReplacer.h"
+#include "SKSE/API.h"
 
 namespace Functions
 {
@@ -11,7 +12,7 @@ namespace Functions
 			return std::make_unique<InvalidFunction>("Missing function value");
 		}
 
-		const auto object = a_value.GetObj();
+		const auto object = a_value.GetObject();
 
 		if (const auto functionNameIt = object.FindMember("function"); functionNameIt != object.MemberEnd() && functionNameIt->value.IsString()) {
 			bool bHasRequiredPlugin = false;
@@ -50,7 +51,7 @@ namespace Functions
 				}
 			} else {
 				// no required plugin, compare required version with OAR function version
-				if (requiredVersion > Plugin::VERSION) {
+				if (requiredVersion > SKSE::GetPluginVersion()) {
 					auto errorStr = std::format("Function {} requires a newer version of OAR! ({})", functionName, requiredVersion.string("."));
 					if (bEssential) {
 						DetectedProblems::GetSingleton().MarkOutdatedVersion();
@@ -195,7 +196,7 @@ namespace Functions
 		UpdateWeightCache();
 
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
-		const auto object = value.GetObj();
+		const auto object = value.GetObjectA();
 		if (const auto weightsIt = object.FindMember("weights"); weightsIt != object.MemberEnd() && weightsIt->value.IsArray()) {
 			size_t i = 0;
 			for (const auto weightsArray = weightsIt->value.GetArray(); auto& weightValue : weightsArray) {
@@ -347,7 +348,7 @@ namespace Functions
 			if (const auto descriptor = form->As<RE::BGSSoundDescriptorForm>()) {
 				RE::BSSoundHandle handle;
 				const auto audioManager = RE::BSAudioManager::GetSingleton();
-				audioManager->BuildSoundDataFromDescriptor(handle, descriptor);
+				audioManager->GetSoundHandle(handle, descriptor);
 				handle.SetObjectToFollow(a_refr->Get3D());
 				handle.Play();
 
@@ -366,7 +367,7 @@ namespace Functions
 				const auto actorValue = actorValueComponent->GetActorValue();
 
 				if (actorValue > RE::ActorValue::kNone && actorValue < RE::ActorValue::kTotal) {
-					actorValueOwner->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, actorValue, valueToWriteComponent->GetNumericValue(a_refr));
+					actorValueOwner->RestoreActorValue(actorValue, valueToWriteComponent->GetNumericValue(a_refr));
 					return true;
 				}
 			}

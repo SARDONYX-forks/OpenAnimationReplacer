@@ -23,7 +23,7 @@ namespace Conditions
 		return hash;
 	}
 
-	constexpr uint32_t operator"" _h(const char* a_str, const size_t a_size) noexcept
+	constexpr uint32_t operator""_h(const char* a_str, const size_t a_size) noexcept
 	{
 		return Hash(a_str, a_size);
 	}
@@ -31,7 +31,7 @@ namespace Conditions
 	void ConditionBase::Initialize(void* a_value)
 	{
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
-		const auto object = value.GetObj();
+		const auto object = value.GetObjectA();
 
 		// disabled
 		if (const auto disabledIt = object.FindMember("disabled"); disabledIt != object.MemberEnd() && disabledIt->value.IsBool()) {
@@ -343,7 +343,7 @@ namespace Conditions
 	void MultiConditionComponent::InitializeComponent(void* a_value)
 	{
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
-		const auto object = value.GetObj();
+		const auto object = value.GetObjectA();
 		if (const auto conditionsIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); conditionsIt != object.MemberEnd() && conditionsIt->value.IsArray()) {
 			for (const auto conditionsArray = conditionsIt->value.GetArray(); auto& conditionValue : conditionsArray) {
 				if (auto condition = CreateConditionFromJson(conditionValue)) {
@@ -387,7 +387,7 @@ namespace Conditions
 	{
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = value.GetObj();
+		const auto object = value.GetObjectA();
 		if (const auto formIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); formIt != object.MemberEnd() && formIt->value.IsObject()) {
 			form.Parse(formIt->value);
 		}
@@ -405,7 +405,7 @@ namespace Conditions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObjectA();
 		if (const auto valueIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); valueIt != object.MemberEnd() && valueIt->value.IsObject()) {
 			value.Parse(valueIt->value);
 		}
@@ -423,7 +423,7 @@ namespace Conditions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObjectA();
 		if (const auto valueIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); valueIt != object.MemberEnd() && valueIt->value.IsArray()) {
 			value.Parse(valueIt->value);
 		}
@@ -441,7 +441,7 @@ namespace Conditions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObjectA();
 		if (const auto keywordIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); keywordIt != object.MemberEnd() && keywordIt->value.IsObject()) {
 			keyword.Parse(keywordIt->value);
 		}
@@ -459,7 +459,7 @@ namespace Conditions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObjectA();
 		if (const auto locRefTypeIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); locRefTypeIt != object.MemberEnd() && locRefTypeIt->value.IsObject()) {
 			locRefType.Parse(locRefTypeIt->value);
 		}
@@ -477,7 +477,7 @@ namespace Conditions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObjectA();
 		if (const auto textIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); textIt != object.MemberEnd() && textIt->value.IsString()) {
 			text.Parse(textIt->value);
 		}
@@ -495,7 +495,7 @@ namespace Conditions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObjectA();
 		if (const auto boolIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); boolIt != object.MemberEnd() && boolIt->value.IsBool()) {
 			bValue = boolIt->value.GetBool();
 		}
@@ -529,7 +529,7 @@ namespace Conditions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObjectA();
 
 		if (const auto comparisonIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); comparisonIt != object.MemberEnd() && comparisonIt->value.IsString()) {
 			const std::string comparisonString = comparisonIt->value.GetString();
@@ -620,10 +620,10 @@ namespace Conditions
 	{
 		auto& val = *static_cast<rapidjson::Value*>(a_value);
 
-		const auto object = val.GetObj();
+		const auto object = val.GetObjectA();
 
 		if (const auto componentIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); componentIt != object.MemberEnd() && componentIt->value.IsObject()) {
-			const auto componentObj = componentIt->value.GetObj();
+			const auto componentObj = componentIt->value.GetObjectA();
 
 			if (CanSelectScope()) {
 				if (const auto scopeIt = componentObj.FindMember("scope"); scopeIt != componentObj.MemberEnd() && scopeIt->value.IsString()) {
@@ -743,7 +743,7 @@ namespace Conditions
 	void ConditionPresetComponent::InitializeComponent(void* a_value)
 	{
 		auto& value = *static_cast<rapidjson::Value*>(a_value);
-		const auto object = value.GetObj();
+		const auto object = value.GetObjectA();
 		if (const auto presetNameIt = object.FindMember(rapidjson::StringRef(_name.data(), _name.length())); presetNameIt != object.MemberEnd() && presetNameIt->value.IsString()) {
 			_presetName = presetNameIt->value.GetString();
 		}

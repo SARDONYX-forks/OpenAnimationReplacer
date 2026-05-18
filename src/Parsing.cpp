@@ -336,7 +336,7 @@ namespace Parsing
 			if (const auto presetIt = doc.FindMember("conditionPresets"); presetIt != doc.MemberEnd() && presetIt->value.IsArray()) {
 				for (auto& conditionPresetValue : presetIt->value.GetArray()) {
 					if (conditionPresetValue.IsObject()) {
-						const auto conditionPresetObject = conditionPresetValue.GetObj();
+						const auto conditionPresetObject = conditionPresetValue.GetObject();
 
 						if (const auto conditionPresetNameIt = conditionPresetObject.FindMember("name"); conditionPresetNameIt != conditionPresetObject.MemberEnd() && conditionPresetNameIt->value.IsString()) {
 							std::string conditionPresetName = conditionPresetNameIt->value.GetString();
